@@ -35,28 +35,7 @@ public class MesonetFrame extends JFrame
     private MapData mapTester;
     private ArrayList<JCheckBox> checkboxes;
 
-    /**
-     * Launch the application.
-     *
-    public static void main(String[] args)
-    {
-        EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
-                    MesonetFrame frame = new MesonetFrame();
-                    frame.setVisible(true);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-*/
+    
     /**
      * Create the frame.
      */
@@ -71,14 +50,16 @@ public class MesonetFrame extends JFrame
         JMenu mnFile = new JMenu("File");
         menuBar.add(mnFile);
         
+        //default file location
         JFileChooser j = new JFileChooser("C:\\Users\\shaho\\OneDrive\\Desktop\\ComputerScience\\CS2334\\Project4\\data");
         
+        //open data file menu item
         JMenuItem mntmOpenDataFile = new JMenuItem("Open Data File");
         mntmOpenDataFile.addActionListener(new ActionListener() { public void actionPerformed(ActionEvent e) {
         
             
             j.showOpenDialog(null);
-            
+            //prepare data once file has been chosen
             mapTester = new MapData(j.getSelectedFile().getAbsolutePath(), j.getSelectedFile().getName());
             try
             {
@@ -86,13 +67,14 @@ public class MesonetFrame extends JFrame
             }
             catch (IOException e1)
             {
-                // TODO Auto-generated catch block
+                //Auto-generated catch block
                 e1.printStackTrace();
             }
         }
         });
         mnFile.add(mntmOpenDataFile);
         
+        //exit button
         JMenuItem mntmExit = new JMenuItem("Exit");
         mntmExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -106,7 +88,7 @@ public class MesonetFrame extends JFrame
         contentPane.setLayout(new BorderLayout(0, 0));
         
         stats = new ButtonGroup();
-        
+        //panel for parameter check boxes
         JPanel panelSelectors = new JPanel();
         contentPane.add(panelSelectors, BorderLayout.WEST);
         GridBagLayout gbl_panelSelectors = new GridBagLayout();
@@ -309,6 +291,13 @@ public class MesonetFrame extends JFrame
                 textAreaReportingStation.setText("");
                 textAreaStatistics.setText("");
                 textAreaParameter.setText("");
+                
+                //show error message if file has not been opened
+                if (j.getSelectedFile()==null)
+                {
+                    JOptionPane.showMessageDialog(null, "A file has not been chosen.");
+                }
+                
                 // if minimum is asked for
                 if (rdbtnMinimum.isSelected())
                 {   //loop through check boxes and display for all checked boxes
@@ -327,7 +316,7 @@ public class MesonetFrame extends JFrame
                 }
                 //if maximum is asked for
                 else if (rdbtnMaximum.isSelected()) 
-                {
+                {   //loop through check boxes and display for all checked boxes
                     for(JCheckBox checkBox: checkboxes)
                     {
                         if (checkBox.isSelected())
@@ -359,6 +348,7 @@ public class MesonetFrame extends JFrame
                     }
                     
                 }
+                //show error for no chosen statistic
                 else 
                 {
                     JOptionPane.showMessageDialog(null,"No Statistics Type Chosen");
@@ -371,7 +361,7 @@ public class MesonetFrame extends JFrame
         JButton btnExit = new JButton("Exit");
         btnExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //TODO Implement Exit Button
+                
                 System.exit(0);
             }
             
@@ -379,11 +369,12 @@ public class MesonetFrame extends JFrame
         panelCommands.add(btnExit);
         
         
-    
+        //add to button group to make mutually exclusive
         stats.add(rdbtnMinimum);
         stats.add(rdbtnMaximum);
         stats.add(rdbtnAverage);
         
+        //add checkbox to arraylist in order to make looping through easy
         checkboxes = new ArrayList <JCheckBox>();
         checkboxes.add(chckbxPres);
         checkboxes.add(chckbxWspd);
@@ -392,11 +383,7 @@ public class MesonetFrame extends JFrame
         checkboxes.add(chckbxTAIR);
     }
     
-    public String getFileName ()
-    {
-        return fileName;
-    }
-  
+   
     
     
    
