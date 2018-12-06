@@ -15,6 +15,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -25,15 +26,16 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class MesonetFrame extends JFrame
 {
 
     private JPanel contentPane;
     private ButtonGroup stats;
-    private String fileName;
     private MapData mapTester;
     private ArrayList<JCheckBox> checkboxes;
+    private JTextField textFieldFileName;
 
     
     /**
@@ -42,7 +44,7 @@ public class MesonetFrame extends JFrame
     public MesonetFrame()
     {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 873, 516);
+        setBounds(100, 100, 930, 530);
         
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
@@ -51,7 +53,9 @@ public class MesonetFrame extends JFrame
         menuBar.add(mnFile);
         
         //default file location
-        JFileChooser j = new JFileChooser("C:\\Users\\shaho\\OneDrive\\Desktop\\ComputerScience\\CS2334\\Project4\\data");
+        JFileChooser j = new JFileChooser();
+        File workingDirectory = new File(System.getProperty("user.dir"));
+        j.setCurrentDirectory(workingDirectory);
         
         //open data file menu item
         JMenuItem mntmOpenDataFile = new JMenuItem("Open Data File");
@@ -59,8 +63,14 @@ public class MesonetFrame extends JFrame
         
             
             j.showOpenDialog(null);
+            
             //prepare data once file has been chosen
-            mapTester = new MapData(j.getSelectedFile().getAbsolutePath(), j.getSelectedFile().getName());
+            if(j.getSelectedFile()!=null)
+            {   
+                //display current opened file name for convenience
+                textFieldFileName.setText(j.getSelectedFile().getName());
+           
+                mapTester = new MapData(j.getSelectedFile().getAbsolutePath(), j.getSelectedFile().getName());
             try
             {
                 mapTester.parseFile();
@@ -70,6 +80,8 @@ public class MesonetFrame extends JFrame
                 //Auto-generated catch block
                 e1.printStackTrace();
             }
+            }
+            
         }
         });
         mnFile.add(mntmOpenDataFile);
@@ -93,9 +105,9 @@ public class MesonetFrame extends JFrame
         contentPane.add(panelSelectors, BorderLayout.WEST);
         GridBagLayout gbl_panelSelectors = new GridBagLayout();
         gbl_panelSelectors.columnWidths = new int[] {0, 0, 0, 50};
-        gbl_panelSelectors.rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20};
-        gbl_panelSelectors.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_panelSelectors.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_panelSelectors.rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20};
+        gbl_panelSelectors.columnWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+        gbl_panelSelectors.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         panelSelectors.setLayout(gbl_panelSelectors);
         
         JLabel lblNewLabel = new JLabel("Parameters");
@@ -164,7 +176,7 @@ public class MesonetFrame extends JFrame
         
         JCheckBox chckbxPres = new JCheckBox("PRES");
         GridBagConstraints gbc_chckbxPres = new GridBagConstraints();
-        gbc_chckbxPres.insets = new Insets(0, 0, 0, 5);
+        gbc_chckbxPres.insets = new Insets(0, 0, 5, 5);
         gbc_chckbxPres.gridx = 0;
         gbc_chckbxPres.gridy = 10;
         panelSelectors.add(chckbxPres, gbc_chckbxPres);
@@ -381,6 +393,24 @@ public class MesonetFrame extends JFrame
         checkboxes.add(chckbxSRAD);
         checkboxes.add(chckbxTA9M);
         checkboxes.add(chckbxTAIR);
+        
+        //label for current file being analyzed
+        JLabel lblNewLabelCurrentFile = new JLabel("Current File");
+        GridBagConstraints gbc_lblNewLabelCurrentFile = new GridBagConstraints();
+        gbc_lblNewLabelCurrentFile.insets = new Insets(0, 0, 0, 5);
+        gbc_lblNewLabelCurrentFile.gridx = 0;
+        gbc_lblNewLabelCurrentFile.gridy = 12;
+        panelSelectors.add(lblNewLabelCurrentFile, gbc_lblNewLabelCurrentFile);
+        
+        //will be used to display current mdf file being analyzed.
+        textFieldFileName = new JTextField();
+        GridBagConstraints gbc_textFieldFileName = new GridBagConstraints();
+        gbc_textFieldFileName.fill = GridBagConstraints.HORIZONTAL;
+        gbc_textFieldFileName.gridx = 2;
+        gbc_textFieldFileName.gridy = 12;
+        textFieldFileName.setEditable(false);
+        panelSelectors.add(textFieldFileName, gbc_textFieldFileName);
+        textFieldFileName.setColumns(10);
     }
     
    
