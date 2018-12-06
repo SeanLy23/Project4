@@ -226,7 +226,7 @@ public class MesonetFrame extends JFrame
         gbc_lblValue.gridy = 0;
         panelOutPut.add(lblValue, gbc_lblValue);
         
-        JLabel lblReportingStation = new JLabel("Reporting Station");
+        JLabel lblReportingStation = new JLabel("Reporting Stations");
         GridBagConstraints gbc_lblReportingStation = new GridBagConstraints();
         gbc_lblReportingStation.insets = new Insets(0, 0, 5, 5);
         gbc_lblReportingStation.gridx = 4;
@@ -255,6 +255,7 @@ public class MesonetFrame extends JFrame
         gbc_textAreaParameter.fill = GridBagConstraints.BOTH;
         gbc_textAreaParameter.gridx = 1;
         gbc_textAreaParameter.gridy = 1;
+        textAreaParameter.setEditable(false);
         panelOutPut.add(textAreaParameter, gbc_textAreaParameter);
         
         JTextArea textAreaStatistics = new JTextArea();
@@ -264,6 +265,7 @@ public class MesonetFrame extends JFrame
         gbc_textAreaStatistics.fill = GridBagConstraints.BOTH;
         gbc_textAreaStatistics.gridx = 2;
         gbc_textAreaStatistics.gridy = 1;
+        textAreaStatistics.setEditable(false);
         panelOutPut.add(textAreaStatistics, gbc_textAreaStatistics);
         
         JTextArea textAreaValue = new JTextArea();
@@ -273,6 +275,7 @@ public class MesonetFrame extends JFrame
         gbc_textAreaValue.fill = GridBagConstraints.BOTH;
         gbc_textAreaValue.gridx = 3;
         gbc_textAreaValue.gridy = 1;
+        textAreaValue.setEditable(false);
         panelOutPut.add(textAreaValue, gbc_textAreaValue);
         
         JTextArea textAreaReportingStation = new JTextArea();
@@ -281,6 +284,7 @@ public class MesonetFrame extends JFrame
         gbc_textAreaReportingStation.fill = GridBagConstraints.BOTH;
         gbc_textAreaReportingStation.gridx = 4;
         gbc_textAreaReportingStation.gridy = 1;
+        textAreaReportingStation.setEditable(false);
         panelOutPut.add(textAreaReportingStation, gbc_textAreaReportingStation);
         
         JTextArea textAreaDate = new JTextArea();
@@ -289,6 +293,7 @@ public class MesonetFrame extends JFrame
         gbc_textAreaDate.fill = GridBagConstraints.BOTH;
         gbc_textAreaDate.gridx = 5;
         gbc_textAreaDate.gridy = 1;
+        textAreaDate.setEditable(false);
         panelOutPut.add(textAreaDate, gbc_textAreaDate);
         
         JButton btnCalculate = new JButton("Calculate");
@@ -296,7 +301,12 @@ public class MesonetFrame extends JFrame
         btnCalculate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //TODO implement calculate button
-                String output;
+                textAreaDate.setText("");
+                textAreaStation.setText("");
+                textAreaValue.setText("");
+                textAreaReportingStation.setText("");
+                textAreaStatistics.setText("");
+                textAreaParameter.setText("");
                 // if minimum is asked for
                 if (rdbtnMinimum.isSelected())
                 {
@@ -304,8 +314,12 @@ public class MesonetFrame extends JFrame
                     {
                         if (checkBox.isSelected())
                         {
-                            textAreaReportingStation.
-                            
+                           textAreaDate.setText(textAreaDate.getText() + mapTester.getStatistics(StatsType.MINIMUM, checkBox.getText()).getUTCDateTimeString() +"\n");
+                           textAreaStation.setText(textAreaStation.getText() + mapTester.getStatistics(StatsType.MINIMUM, checkBox.getText()).getStid()+"\n");
+                           textAreaValue.setText(textAreaValue.getText() + mapTester.getStatistics(StatsType.MINIMUM, checkBox.getText()).getValue() +"\n");
+                           textAreaReportingStation.setText(textAreaReportingStation.getText() + mapTester.getStatistics(StatsType.MINIMUM, checkBox.getText()).getNumberOfReportingStations() +"\n");
+                           textAreaStatistics.setText(textAreaStatistics.getText() + mapTester.getStatistics(StatsType.MINIMUM, checkBox.getText()).getStatType().name() +"\n");
+                           textAreaParameter.setText(textAreaParameter.getText() + checkBox.getText() +"\n");
                         }
                     }
                 }
@@ -340,6 +354,7 @@ public class MesonetFrame extends JFrame
         stats.add(rdbtnMaximum);
         stats.add(rdbtnAverage);
         
+        checkboxes = new ArrayList <JCheckBox>();
         checkboxes.add(chckbxPres);
         checkboxes.add(chckbxWspd);
         checkboxes.add(chckbxSRAD);
