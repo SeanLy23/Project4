@@ -7,6 +7,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
@@ -300,7 +302,7 @@ public class MesonetFrame extends JFrame
         panelCommands.add(btnCalculate);
         btnCalculate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //TODO implement calculate button
+                //clear texts for each new calculation
                 textAreaDate.setText("");
                 textAreaStation.setText("");
                 textAreaValue.setText("");
@@ -309,7 +311,7 @@ public class MesonetFrame extends JFrame
                 textAreaParameter.setText("");
                 // if minimum is asked for
                 if (rdbtnMinimum.isSelected())
-                {
+                {   //loop through check boxes and display for all checked boxes
                     for(JCheckBox checkBox: checkboxes)
                     {
                         if (checkBox.isSelected())
@@ -326,12 +328,40 @@ public class MesonetFrame extends JFrame
                 //if maximum is asked for
                 else if (rdbtnMaximum.isSelected()) 
                 {
+                    for(JCheckBox checkBox: checkboxes)
+                    {
+                        if (checkBox.isSelected())
+                        {
+                           textAreaDate.setText(textAreaDate.getText() + mapTester.getStatistics(StatsType.MAXIMUM, checkBox.getText()).getUTCDateTimeString() +"\n");
+                           textAreaStation.setText(textAreaStation.getText() + mapTester.getStatistics(StatsType.MAXIMUM, checkBox.getText()).getStid()+"\n");
+                           textAreaValue.setText(textAreaValue.getText() + mapTester.getStatistics(StatsType.MAXIMUM, checkBox.getText()).getValue() +"\n");
+                           textAreaReportingStation.setText(textAreaReportingStation.getText() + mapTester.getStatistics(StatsType.MAXIMUM, checkBox.getText()).getNumberOfReportingStations() +"\n");
+                           textAreaStatistics.setText(textAreaStatistics.getText() + mapTester.getStatistics(StatsType.MAXIMUM, checkBox.getText()).getStatType().name() +"\n");
+                           textAreaParameter.setText(textAreaParameter.getText() + checkBox.getText() +"\n");
+                        }
+                    }
                     
                 }
                 //if average is asked for
+                else if (rdbtnAverage.isSelected())
+                {
+                    for(JCheckBox checkBox: checkboxes)
+                    {
+                        if (checkBox.isSelected())
+                        {
+                           textAreaDate.setText(textAreaDate.getText() + mapTester.getStatistics(StatsType.AVERAGE, checkBox.getText()).getUTCDateTimeString() +"\n");
+                           textAreaStation.setText(textAreaStation.getText() + mapTester.getStatistics(StatsType.AVERAGE, checkBox.getText()).getStid()+"\n");
+                           textAreaValue.setText(textAreaValue.getText() + mapTester.getStatistics(StatsType.AVERAGE, checkBox.getText()).getValue() +"\n");
+                           textAreaReportingStation.setText(textAreaReportingStation.getText() + mapTester.getStatistics(StatsType.AVERAGE, checkBox.getText()).getNumberOfReportingStations() +"\n");
+                           textAreaStatistics.setText(textAreaStatistics.getText() + mapTester.getStatistics(StatsType.AVERAGE, checkBox.getText()).getStatType().name() +"\n");
+                           textAreaParameter.setText(textAreaParameter.getText() + checkBox.getText() +"\n");
+                        }
+                    }
+                    
+                }
                 else 
                 {
-                    
+                    JOptionPane.showMessageDialog(null,"No Statistics Type Chosen");
                 }
                 
             }
